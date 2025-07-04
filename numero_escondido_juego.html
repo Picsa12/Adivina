@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Número Escondido</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .carton {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+    }
+    .numeros {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .numeros span {
+      background: #e0e0e0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-weight: bold;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+    button.no {
+      background: #f44336;
+    }
+    #resultado {
+      font-size: 24px;
+      color: #000;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎩 Adivina tu Número del 1 al 50</h1>
+  <p>Piensa un número del 1 al 50 y dime si aparece en los siguientes cartones:</p>
+
+  <div id="cartones"></div>
+
+  <div id="resultado"></div>
+
+  <script>
+    const cartones = [
+      { valor: 1,  numeros: generarCarton(1) },
+      { valor: 2,  numeros: generarCarton(2) },
+      { valor: 4,  numeros: generarCarton(4) },
+      { valor: 8,  numeros: generarCarton(8) },
+      { valor: 16, numeros: generarCarton(16) },
+      { valor: 32, numeros: generarCarton(32) }
+    ];
+
+    let suma = 0;
+    let indice = 0;
+
+    const divCartones = document.getElementById("cartones");
+    const resultado = document.getElementById("resultado");
+
+    mostrarCarton();
+
+    function mostrarCarton() {
+      if (indice >= cartones.length) {
+        resultado.innerText = `¡Tu número es: ${suma}!`;
+        return;
+      }
+
+      const carton = cartones[indice];
+      divCartones.innerHTML = `
+        <div class="carton">
+          <h3>¿Está tu número aquí?</h3>
+          <div class="numeros">
+            ${carton.numeros.map(n => `<span>${n}</span>`).join('')}
+          </div>
+          <button onclick="respuesta(true)">Sí</button>
+          <button class="no" onclick="respuesta(false)">No</button>
+        </div>
+      `;
+    }
+
+    function respuesta(esta) {
+      if (esta) {
+        suma += cartones[indice].valor;
+      }
+      indice++;
+      mostrarCarton();
+    }
+
+    function generarCarton(valor) {
+      let arr = [];
+      for (let i = 1; i <= 50; i++) {
+        if ((i & valor) !== 0) arr.push(i);
+      }
+      return arr;
+    }
+  </script>
+</body>
+</html>
